@@ -174,7 +174,7 @@ access = "OfAOARc0bcf71Gt1pgxExfLE7YavYTBLbU3WxuqF"
 secret = "Ix4UbQvwyxOQ3Gj7WgzeMCHQ4B0J2Ae7JIiN7jzR"
 
 # 슬랙 토큰 입력
-myToken = "xoxb-3135357024800-3119472538871-a87u5mvBpGEIeA6ekEFyKs5b"
+myToken = "xoxb-3135357024800-3124236991793-0Wni1xzzwOjHZ8k5MIY7e04q"
 
 # 자본금
 total = 18000
