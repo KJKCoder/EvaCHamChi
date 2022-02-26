@@ -205,7 +205,7 @@ headers = {"Accept": "application/json"}
 querystring = {"markets":krw_tickers}
 
 #관심 코인 리스트, RSI변동 시간 간격 설정
-coinlist = ["KRW-BTC","KRW-ETH","KRW-XRP","KRW-ADA","KRW-SOL","KRW-AVAX","KRW-DOT","KRW-DOGE","KRW-MATIC","KRW-CRO", "KRW-LTC","KRW-ATOM","KRW-LINK","KRW-TRX","KRW-NEAR","KRW-BCH","KRW-ALGO"]
+coinlist = ["KRW-BTC","KRW-ETH","KRW-XRP","KRW-ADA","KRW-SOL","KRW-AVAX","KRW-DOT","KRW-DOGE","KRW-MATIC","KRW-CRO", "KRW-LTC","KRW-ATOM","KRW-LINK","KRW-TRX","KRW-NEAR","KRW-BCH","KRW-ALGO","KRW-MANA","KRW-ETC","KRW-SAND","KRW-AXS","KRW-XTZ","KRW-THETA"]
 interval_time = "minute240"
 Market_RSI_Bef = "Usually_Market_RSI"
 Market_RSI_Count = 0
@@ -228,7 +228,6 @@ for curCoin in coinlist:
         CoinInfo[curCoin]["BuyTime"] = -1
         CoinInfo[curCoin]["CoinPriceMyBuy"] = 0
         CoinInfo[curCoin]["SellPermitTime"] = 0 
-
 Prt_and_Slack("Start Program")
 
 # 자동매매 시작
@@ -357,7 +356,7 @@ while True:
                         message = curCoin+" Sold Because One Day Later. when: " + str(datetime.datetime.now())
                         Prt_and_Slack(message)
 
-            #print(curCoin , " nowRSI: ",now_rsi ," BefRSI: ", CoinInfo[curCoin]["RSIBef"], target_price , current_price , ma15)        
+            print(curCoin , " nowRSI: ",now_rsi ," BefRSI: ", CoinInfo[curCoin]["RSIBef"], target_price , current_price , ma15)        
 
 
 
