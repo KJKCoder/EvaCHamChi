@@ -89,7 +89,7 @@ def sell(coin, currentprice):
 
     left += currentprice*amount
     CoinInfo[coin]["BuyTime"] = -1
-    CoinInfo[coin]["CoinPriceMyBuy"] = -1
+    CoinInfo[coin]["CoinPriceMyBuy"] = 0
     CoinInfo[coin]["RSIHighest"] = -1
     CoinInfo[coin]["higher"] = False
     CoinInfo[coin]["SellPermitTime"] = datetime.datetime.now()
@@ -155,15 +155,17 @@ def check_Market_RSI(RSIMonitor) :
     return result
 
 #코인 Sell 후 4시간 동안 구입 금지 
-def BanSoldCoin4Hour(curCoin, Nowtime):
+def CheckBanSoldCoin4Hour(curCoin, Nowtime):
     global CoinInfo
-    if Nowtime >= CoinInfo[curCoin]["SellPermitTime"] + datetime.timedelta(hours=4) :
-        CoinInfo[curCoin]["SellPermitTime"] = 0
-        CoinInfo[curCoin]["CoinPriceMyBuy"] = 0
-        return False
+    if not(CoinInfo[curCoin]["SellPermitTime"] == 0) : 
+        if Nowtime >= CoinInfo[curCoin]["SellPermitTime"] + datetime.timedelta(hours=4) :
+            CoinInfo[curCoin]["SellPermitTime"] = 0
+            CoinInfo[curCoin]["CoinPriceMyBuy"] = 0
+            return False
+        else :
+            return True
     else :
-        CoinInfo[curCoin]["CoinPriceMyBuy"] = -1
-        return True
+        return False
     
 
 # 슬랙 메시지 보내기
@@ -260,7 +262,7 @@ while True:
 
             # 판매후 4시간이 지나지 않은 코인은 건너뜀
             Nowtime = datetime.datetime.now()
-            if BanSoldCoin4Hour(curCoin,Nowtime) == True : continue
+            if CheckBanSoldCoin4Hour(curCoin,Nowtime) == True : continue
             
             #조정 변수 불러오기
             target_price = get_target_price(curCoin, 0.3)
