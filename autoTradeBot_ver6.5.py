@@ -388,13 +388,13 @@ while True:
                     if TargetTouchCoin_Count[curCoin] >= 3 :
                         
                         if recommend == "A" :
-                            tempA.add(curCoin)
+                            tempA.append(curCoin)
                             
                         elif recommend == "B" :
-                            tempB.add(curCoin)
+                            tempB.append(curCoin)
                             
                         elif recommend == "C" :
-                            tempC.add(curCoin)  
+                            tempC.append(curCoin)  
                             
             for curCoin in tempA :
                 buy(curCoin,0.6)
@@ -411,6 +411,6 @@ while True:
 
 
     except Exception as e :
-        message = e + " is Error Occured"
+        message = str(e) + " is Error Occured"
         Prt_and_Slack(message)
     time.sleep(900)
