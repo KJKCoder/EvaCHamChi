@@ -10,18 +10,22 @@ from collections import defaultdict
 def buy(coin, rate): 
     global CoinInfo
     global total
+    global NomoneyBool
     krw = get_balance("KRW")
     time.sleep(0.2)
     
     if krw > total * rate:
+        NomoneyBool = False
         upbit.buy_market_order(coin, total * rate)
         time.sleep(0.2)
         CoinInfo[coin]["PriceBuy"] = total * rate
         message = coin + " buy " + str(CoinInfo[coin]["PriceBuy"]) + "won " + str(krw - CoinInfo[coin]["PriceBuy"]) + "left."
         Prt_and_Slack(message)
     else :
-        message = "No Money"
-        Prt_and_Slack(message)
+        if NomoneyBool == False :
+            message = "No Money"
+            Prt_and_Slack(message)
+        NomoneyBool = True
     return
 
 #매도
@@ -111,12 +115,12 @@ querystring = {"markets":krw_tickers}
 myToken = ""
 
 #조절 변수 입력
-total = 95000
+total = 100000
 interval_time = "day"
 K_value = 0.5
-coinlist = ["KRW-ADA","KRW-POWR","KRW-EOS","KRW-POLY","KRW-IOST","KRW-KNC","KRW-QKC","KRW-AERGO","KRW-VET","KRW-HIVE","KRW-AHT","KRW-JST","KRW-PLA","KRW-META","KRW-DOGE","KRW-SOL","KRW-BTC","KRW-ETH","KRW-LTC","KRW-XRP","KRW-WAVES","KRW-SC","KRW-BCH","KRW-MANA","KRW-ATOM","KRW-MBL","KRW-LINK","KRW-SAND","KRW-AXS","KRW-MATIC","KRW-AAVE","KRW-1INCH","KRW-NEAR","KRW-AVAX"]
+coinlist = ["KRW-ADA","KRW-POWR","KRW-EOS","KRW-POLY","KRW-IOST","KRW-KNC","KRW-QKC","KRW-VET","KRW-HIVE","KRW-AHT","KRW-JST","KRW-PLA","KRW-META","KRW-DOGE","KRW-SOL","KRW-BTC","KRW-ETH","KRW-LTC","KRW-XRP","KRW-WAVES","KRW-SC","KRW-BCH","KRW-MANA","KRW-ATOM","KRW-MBL","KRW-LINK","KRW-SAND","KRW-AXS","KRW-MATIC","KRW-AAVE","KRW-1INCH","KRW-NEAR","KRW-AVAX","KRW-CELO"]
 CoinInfo = defaultdict(dict)
-
+NomoneyBool = False
 
 print("autotrade start")
 Prt_and_Slack("Start Program")
