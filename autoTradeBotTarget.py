@@ -1,4 +1,3 @@
-from pickle import FALSE
 import time
 import pyupbit
 import datetime
