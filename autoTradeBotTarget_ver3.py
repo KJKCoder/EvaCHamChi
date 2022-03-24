@@ -141,7 +141,7 @@ headers = {"Accept": "application/json"}
 myToken = ""
 
 #조절 변수 입력
-total = 100000 #get_balance("KRW") - 5000
+total = get_balance("KRW") - 5000
 time.sleep(0.2)
 interval_time = "day"
 K_value = 0.5
@@ -177,7 +177,6 @@ while True:
                     else :
                         message = curCoin + " is CAUTION State"
                         Prt_and_Slack(message)
-                print(curCoin, " " , curPrice,  " ",Ma1515 , " ", Ma1530 ," " , target_price)
             temp = CoinInfo
             for curCoin in temp :
                 Ma1515 = get_ma15(curCoin,"minutes15",15)
@@ -187,7 +186,6 @@ while True:
                     CoinInfo["CurPrice"] = curPrice
                     time.sleep(0.2)
                     sell(curCoin, CoinInfo["CurPrice"])
-                print(curCoin,  " check ",Ma1515 , " ", Ma1530 ," " )
         elif end_time <= now_time :
             temp = CoinInfo
             for curCoin in temp :
