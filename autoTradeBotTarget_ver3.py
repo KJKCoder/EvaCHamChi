@@ -169,6 +169,12 @@ while True:
 
         if start_time < now_time < end_time :
             for curCoin in coinlist :
+
+                if curCoin in TimeSold :
+                    message = curCoin + " Buy Lock"
+                    Prt_and_Slack(message)
+                    continue
+
                 target_price = get_target_price(curCoin, interval_time, K_value)
                 curPrice = get_current_price(curCoin)
                 Mal15 = get_ma15(curCoin)
@@ -204,6 +210,7 @@ while True:
             CoinInfo = defaultdict(dict)
             TimeSold = {}
             time.sleep(0.2)
+
 
         temp = list(TimeSold.keys())
         for curCoin in temp:
