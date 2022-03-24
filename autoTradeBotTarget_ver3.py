@@ -150,6 +150,7 @@ K_value = 0.5
 coinlist = []
 CoinInfo = defaultdict(dict)
 CoinMyBuy = []
+TimeSold = {}
 NomoneyBool = False
 
 print("autotrade start")
@@ -190,6 +191,8 @@ while True:
                     time.sleep(0.2)
                     sell(curCoin, curPrice)
 
+                    TimeSold[curCoin] = now_time
+
         elif end_time <= now_time :
             CoinMyBuy = list(CoinInfo.keys())
             for curCoin in CoinMyBuy :
@@ -199,7 +202,13 @@ while True:
             
             total = get_balance("KRW") - 5000
             CoinInfo = defaultdict(dict)
+            TimeSold = {}
             time.sleep(0.2)
+
+        temp = list(TimeSold.keys())
+        for curCoin in temp:
+            if TimeSold[curCoin] + datetime.timedelta(minutes=120) < now_time :
+                del TimeSold[curCoin]
 
     except Exception as e :
         message = str(e) + " is Error Occured"
