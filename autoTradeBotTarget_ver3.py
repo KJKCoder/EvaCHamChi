@@ -24,6 +24,7 @@ def buy(coin, rate):
     global CoinInfo
     global total
     global NomoneyBool
+    global CoinMyBuy
     krw = get_balance("KRW")
     time.sleep(0.2)
     
@@ -32,6 +33,7 @@ def buy(coin, rate):
         upbit.buy_market_order(coin, total * rate)
         time.sleep(0.2)
         CoinInfo[coin]["PriceBuy"] = total * rate
+        CoinMyBuy.append(coin)
         message = coin + " buy " + str(CoinInfo[coin]["PriceBuy"]) + "won " + str(krw - CoinInfo[coin]["PriceBuy"]) + "left."
         Prt_and_Slack(message)
     else :
@@ -54,7 +56,7 @@ def sell(coin, currentprice):
     message = coin + " is all Sold. Profit: " + str(Calculate_Profit(coin,currentprice*amount)*100) + "%"
     Prt_and_Slack(message)
 
-    total += currentprice*amount*0.995 - CoinInfo[coin]["PriceBuy"]
+    total += int(currentprice)*amount*0.995 - CoinInfo[coin]["PriceBuy"]
     del CoinInfo[coin]
     return
 
@@ -147,6 +149,7 @@ interval_time = "day"
 K_value = 0.5
 coinlist = []
 CoinInfo = defaultdict(dict)
+CoinMyBuy = []
 NomoneyBool = False
 
 print("autotrade start")
@@ -168,8 +171,8 @@ while True:
                 target_price = get_target_price(curCoin, interval_time, K_value)
                 curPrice = get_current_price(curCoin)
                 Mal15 = get_ma15(curCoin)
-                Ma1515 = get_ma15(curCoin,"minutes15",15)
-                Ma1530 = get_ma15(curCoin,"minutes15",30)
+                Ma1515 = get_ma15(curCoin,"minutes30",15)
+                Ma1530 = get_ma15(curCoin,"minutes30",30)
 
                 if curPrice >= target_price and curPrice > Mal15 and (curCoin in CoinInfo) == False and Ma1515 >= Ma1530:
                     if check_CAUTION(CAUTION_coinlist,curCoin) == False :
@@ -177,22 +180,22 @@ while True:
                     else :
                         message = curCoin + " is CAUTION State"
                         Prt_and_Slack(message)
-            temp = CoinInfo
-            for curCoin in temp :
-                Ma1515 = get_ma15(curCoin,"minutes15",15)
-                Ma1530 = get_ma15(curCoin,"minutes15",30)
+
+            CoinMyBuy = list(CoinInfo.keys())
+            for curCoin in CoinMyBuy :
+                Ma1515 = get_ma15(curCoin,"minutes30",15)
+                Ma1530 = get_ma15(curCoin,"minutes30",30)
                 if Ma1515 < Ma1530 : 
                     curPrice = get_current_price(curCoin)
-                    CoinInfo["CurPrice"] = curPrice
                     time.sleep(0.2)
-                    sell(curCoin, CoinInfo["CurPrice"])
+                    sell(curCoin, curPrice)
+
         elif end_time <= now_time :
-            temp = CoinInfo
-            for curCoin in temp :
+            CoinMyBuy = list(CoinInfo.keys())
+            for curCoin in CoinMyBuy :
                 curPrice = get_current_price(curCoin)
-                CoinInfo["CurPrice"] = curPrice
                 time.sleep(0.2)
-                sell(curCoin, CoinInfo["CurPrice"])
+                sell(curCoin, curPrice)
             
             total = get_balance("KRW") - 5000
             CoinInfo = defaultdict(dict)
