@@ -164,7 +164,7 @@ while True:
         CAUTION_coinlist = get_CAUTION_coinlist()
 
         start_time = get_start_time("KRW-BTC", interval_time)
-        end_time = start_time + datetime.timedelta(days=1) - datetime.timedelta(minutes=3)
+        end_time = start_time + datetime.timedelta(days=1) - datetime.timedelta(minutes=5)
         now_time = datetime.datetime.now()
 
         if start_time < now_time < end_time :
