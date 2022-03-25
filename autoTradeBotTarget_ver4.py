@@ -178,8 +178,8 @@ schedule.every(3).hours.do(check_running_right)
 
 
 # access키와 secret키 입력
-access = "86ofHdRH8NRUITLBfIbqpzXeZ7H0xRewbqSYZmZO"
-secret = "UAE9IWCGY0J94s1xSroxqGTMpZu4X0WaxGrolZjC"
+access = "OfAOARc0bcf71Gt1pgxExfLE7YavYTBLbU3WxuqF"
+secret = "Ix4UbQvwyxOQ3Gj7WgzeMCHQ4B0J2Ae7JIiN7jzR"
 
 #로그인 및 request 변수
 upbit = pyupbit.Upbit(access, secret)
