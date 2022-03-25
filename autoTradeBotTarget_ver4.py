@@ -69,8 +69,10 @@ def sell(coin, currentprice):
     time.sleep(0.2)
 
     #수익 Output
-    message = coin + " is all Sold. Profit: " + str(Calculate_Profit(coin,currentprice*amount,amount)*100) + "%"
+    Profit = Calculate_Profit(coin,currentprice*amount,amount)*100
+    message = coin + " is all Sold. Profit: " + str(Profit) + "%"
     Prt_and_Slack(message)
+    ProfitList.append(Profit)
 
     tempint = int(currentprice)*amount*0.999
     total += tempint - CoinInfo[coin]["PriceBuy"]*amount
@@ -203,6 +205,8 @@ CoinInfo = defaultdict(dict)
 NomoneyBool = False
 initialize_Done = False
 
+ProfitList = []
+
 print("autotrade start")
 Prt_and_Slack("Start Program")
 
@@ -250,7 +254,6 @@ while True:
                             message = curCoin + " is CAUTION State"
                             Prt_and_Slack(message)
 
-                    print(curCoin, curPrice, Ma3015)
                 
                 elif CoinInfo[curCoin]["PriceBuy"] > 0 :
                     set_TakeProfit_Price(curCoin,curPrice)
@@ -271,7 +274,12 @@ while True:
                     sell(curCoin, curPrice)
 
             initialize_Done = False
-        print(CoinInfo)
+
+            if len(ProfitList) != 0 :
+                message = str(sum(ProfitList)/len(ProfitList)) + "% Profit Day"
+                Prt_and_Slack(message)
+                ProfitList = []
+
     except Exception as e :
         message = str(e) + " is Error Occured"
         Prt_and_Slack(message)
