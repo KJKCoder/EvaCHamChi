@@ -69,12 +69,13 @@ def sell(coin, currentprice):
     time.sleep(0.2)
 
     #수익 Output
-    Profit = Calculate_Profit(coin,currentprice*amount,amount)*100
+    tempProfit = Calculate_Profit(CoinInfo[coin]["PriceBuy"],currentprice)*100
+    Profit = format(tempProfit,'f')
     message = coin + " is all Sold. Profit: " + str(Profit) + "%"
     Prt_and_Slack(message)
-    ProfitList.append(Profit)
+    ProfitList.append(tempProfit)
 
-    tempint = int(currentprice)*amount*0.999
+    tempint = currentprice*amount*0.999
     total += tempint - CoinInfo[coin]["PriceBuy"]*amount
     left += tempint
 
@@ -85,8 +86,10 @@ def sell(coin, currentprice):
     return
 
 #수익 계산
-def Calculate_Profit(coin, soldprice, amount) :
-    return round(soldprice - CoinInfo[coin]["PriceBuy"]*amount,4) / CoinInfo[coin]["PriceBuy"]*amount
+def Calculate_Profit(buyprice, soldprice) :
+    
+    output = ((soldprice-buyprice)/buyprice)
+    return output
 
 # 시작 시간 조회
 def get_start_time(ticker, interval):             
@@ -234,7 +237,7 @@ while True:
                 if CoinInfo[curCoin]["PriceBuy"] == 0 :
 
                     if CoinInfo[curCoin]["SoldTime"] != 0 :
-                        if CoinInfo[curCoin]["SoldTime"] + datetime.timedelta(minutes=120) < now_time :
+                        if CoinInfo[curCoin]["SoldTime"] + datetime.timedelta(minutes=120) > now_time :
                             message = curCoin + " Buy Lock"
                             Prt_and_Slack(message)
                             continue
@@ -254,7 +257,6 @@ while True:
                             message = curCoin + " is CAUTION State"
                             Prt_and_Slack(message)
 
-                
                 elif CoinInfo[curCoin]["PriceBuy"] > 0 :
                     set_TakeProfit_Price(curCoin,curPrice)
 
@@ -274,7 +276,7 @@ while True:
                     sell(curCoin, curPrice)
 
             initialize_Done = False
-
+    
             if len(ProfitList) != 0 :
                 message = str(sum(ProfitList)/len(ProfitList)) + "% Profit Day"
                 Prt_and_Slack(message)
