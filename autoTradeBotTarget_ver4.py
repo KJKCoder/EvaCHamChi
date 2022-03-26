@@ -9,7 +9,7 @@ from collections import defaultdict
 def initialize() :
     global coinlist
     global CoinInfo
-
+    """
     krw_tickers = pyupbit.get_tickers("KRW")
     querystring = {"markets":krw_tickers}
 
@@ -20,11 +20,13 @@ def initialize() :
 
     templist = sorteddf.loc[0:10]["market"].values.tolist()
     coinlist = Intereset_Coin
-
+    
     for curCoin in templist :
         if not(curCoin in Intereset_Coin) :
             coinlist.append(curCoin)
+    """
 
+    coinlist = Intereset_Coin
     CoinInfo = defaultdict(dict)
     for curCoin in coinlist :
         CoinInfo[curCoin]["PriceBuy"] = 0
@@ -160,7 +162,7 @@ def set_TakeProfit_Price(curCoin, currentPrice) :
     global CoinInfo
     PriceBuy = CoinInfo[curCoin]["PriceBuy"]
     profit_rate = (currentPrice - PriceBuy) / PriceBuy
-    if profit_rate >= 0.04 :
+    if profit_rate >= 0.03 :
         if CoinInfo[curCoin]["TakeProfit"] <=  (1 + profit_rate/2) * PriceBuy :
             CoinInfo[curCoin]["TakeProfit"] = (1 + profit_rate/2) * PriceBuy
     return True
@@ -197,8 +199,8 @@ headers = {"Accept": "application/json"}
 myToken = ""
 
 #조절 변수 입력
-total = 97000
-left = 97000
+total = 96500
+left = 96500
 time.sleep(0.2)
 interval_time = "day"
 K_value = 0.3
@@ -237,7 +239,7 @@ while True:
                 if CoinInfo[curCoin]["PriceBuy"] == 0 :
 
                     if CoinInfo[curCoin]["SoldTime"] != 0 :
-                        if CoinInfo[curCoin]["SoldTime"] + datetime.timedelta(minutes=120) > now_time :
+                        if CoinInfo[curCoin]["SoldTime"] + datetime.timedelta(days=1) > now_time :
                             message = curCoin + " Buy Lock"
                             Prt_and_Slack(message)
                             continue
