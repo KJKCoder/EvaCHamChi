@@ -197,8 +197,8 @@ headers = {"Accept": "application/json"}
 myToken = ""
 
 #조절 변수 입력
-total = 100000
-left =100000
+total = 97000
+left = 97000
 time.sleep(0.2)
 interval_time = "day"
 K_value = 0.3
