@@ -139,8 +139,6 @@ while(True) :
                 sell(curCoin, curPrice)
             elif CoinInfo[curCoin]["StopLoss"] > curPrice :
                 sell(curCoin, curPrice)
-        print("done")
-        print(CoinInfo)
     except Exception as e :
         message = str(e) + " is Error Occured"
         Prt_and_Slack(message)
