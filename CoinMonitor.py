@@ -8,7 +8,8 @@ import schedule
 
 # 슬랙 토큰 입력
 myToken = ""
-
+# 존버 전략 코인
+LongStrategyCoin = ["KRW-SOL"]
 # access키와 secret키 입력
 access = "XZq3Elq9i9xWk4dBgdmxRNrzorZiGkEGckL9o7Mo"
 secret = "pVVVa1oNNgGzCDadIU9cqxkCbYOna5RU2SEBZMKQ"
@@ -128,7 +129,6 @@ schedule.every(3).hours.do(check_running_right)
 
 
 CoinInfo = defaultdict(dict)
-LongStrategyCoin = ["KRW-SOL"]
 
 Prt_and_Slack("Start Program")
 
