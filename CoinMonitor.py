@@ -10,8 +10,8 @@ import schedule
 myToken = ""
 
 # access키와 secret키 입력
-access = "NPfpM0dzWFH45GqsHcrt2InxtDoVxfBYopy3wBhp"
-secret = "EyqbK9Z5LfqGxrUxMqLo0gz4A8ZVUJ4qUhQOyDME"
+access = "XZq3Elq9i9xWk4dBgdmxRNrzorZiGkEGckL9o7Mo"
+secret = "pVVVa1oNNgGzCDadIU9cqxkCbYOna5RU2SEBZMKQ"
 upbit = pyupbit.Upbit(access, secret)
 
 
@@ -88,10 +88,13 @@ def Set_CoinInfo():
         if CoinInfo[curCoin]["HighPrice"] <= curPrice :
             CoinInfo[curCoin]["HighPrice"] = curPrice
         CoinInfo[curCoin]["BuyPrice"] = get_buy_avg_Price(curCoin)
-        CoinInfo[curCoin]["StopLoss"] = CoinInfo[curCoin]["BuyPrice"]*0.8
+        CoinInfo[curCoin]["StopLoss"] = CoinInfo[curCoin]["BuyPrice"]*0.9
         if CoinInfo[curCoin]["BuyPrice"]*1.08 < curPrice :
-            CoinInfo[curCoin]["TimeProfit"] = (CoinInfo[curCoin]["HighPrice"] + CoinInfo[curCoin]["BuyPrice"])/2
-    
+            CoinInfo[curCoin]["TimeProfit"] = (CoinInfo[curCoin]["HighPrice"] + CoinInfo[curCoin]["BuyPrice"])*0.5
+
+        if curCoin in LongStrategyCoin:
+            CoinInfo[curCoin]["StopLoss"] = CoinInfo[curCoin]["BuyPrice"]*0.8
+            CoinInfo[curCoin]["TimeProfit"] = -1
     return True
 
 #현재 보유 중인 코인 목록 조회
@@ -125,11 +128,13 @@ schedule.every(3).hours.do(check_running_right)
 
 
 CoinInfo = defaultdict(dict)
+LongStrategyCoin = ["KRW-SOL"]
 
 Prt_and_Slack("Start Program")
 
 while(True) :
     try:
+        schedule.run_pending()
         initialize()
 
         for curCoin in CoinInfo :
@@ -139,6 +144,7 @@ while(True) :
                 sell(curCoin, curPrice)
             elif CoinInfo[curCoin]["StopLoss"] > curPrice :
                 sell(curCoin, curPrice)
+
     except Exception as e :
         message = str(e) + " is Error Occured"
         Prt_and_Slack(message)
