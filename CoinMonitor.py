@@ -9,7 +9,7 @@ import schedule
 # 슬랙 토큰 입력
 myToken = ""
 # 존버 전략 코인
-LongStrategyCoin = ["KRW-SOL"]
+LongStrategyCoin = ["KRW-SOL","KRW-SAND"]
 # access키와 secret키 입력
 access = "XZq3Elq9i9xWk4dBgdmxRNrzorZiGkEGckL9o7Mo"
 secret = "pVVVa1oNNgGzCDadIU9cqxkCbYOna5RU2SEBZMKQ"
