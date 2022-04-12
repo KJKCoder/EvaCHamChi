@@ -13,8 +13,8 @@ LongStrategyCoin = []
 total = 100000
 left = 100000
 # access키와 secret키 입력
-access = "NPfpM0dzWFH45GqsHcrt2InxtDoVxfBYopy3wBhp"
-secret = "EyqbK9Z5LfqGxrUxMqLo0gz4A8ZVUJ4qUhQOyDME"
+access = "XZq3Elq9i9xWk4dBgdmxRNrzorZiGkEGckL9o7Mo"
+secret = "pVVVa1oNNgGzCDadIU9cqxkCbYOna5RU2SEBZMKQ"
 upbit = pyupbit.Upbit(access, secret)
 
 #초기화
