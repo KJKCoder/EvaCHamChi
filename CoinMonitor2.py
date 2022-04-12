@@ -1,4 +1,3 @@
-from calendar import c
 import time
 import pyupbit
 import pandas as pd
