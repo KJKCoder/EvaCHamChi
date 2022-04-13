@@ -1,3 +1,4 @@
+from calendar import c
 import time
 import pyupbit
 import pandas as pd
@@ -8,7 +9,7 @@ import schedule
 
 # 슬랙 토큰 입력
 myToken = ""
-LongStrategyCoin = []
+LongStrategyCoin = ["KRW-IQ", "KRW-SRM"]
 total = 100000
 left = 100000
 # access키와 secret키 입력
@@ -28,11 +29,10 @@ def initialize() :
             temp_to_add.append(curCoin)
             
     for curCoin in temp_to_add :
-        if not(curCoin in LongStrategyCoin) :
-            CoinInfo[curCoin]["HighPrice"] = 0
-            CoinInfo[curCoin]["BuyPrice"] = 0
-            CoinInfo[curCoin]["StopLoss"] = -1
-            CoinInfo[curCoin]["TimeProfit"] = -1
+        CoinInfo[curCoin]["HighPrice"] = 0
+        CoinInfo[curCoin]["BuyPrice"] = 0
+        CoinInfo[curCoin]["StopLoss"] = -1
+        CoinInfo[curCoin]["TimeProfit"] = -1
 
     Set_CoinInfo()
     return True
@@ -125,6 +125,11 @@ def Set_CoinInfo():
         if CoinInfo[curCoin]["BuyPrice"]*1.03 < curPrice :
             CoinInfo[curCoin]["TimeProfit"] = (CoinInfo[curCoin]["HighPrice"] + CoinInfo[curCoin]["BuyPrice"])*0.5
 
+        if curCoin in LongStrategyCoin :
+            CoinInfo[curCoin]["TimeProfit"] = -1
+            CoinInfo[curCoin]["StopLoss"] = -1
+            if CoinInfo[curCoin]["BuyPrice"]*1.1 < curPrice :
+                CoinInfo[curCoin]["TimeProfit"] = (CoinInfo[curCoin]["HighPrice"] + CoinInfo[curCoin]["BuyPrice"])*0.5
     return True
 
 #현재 보유 중인 코인 목록 조회
@@ -158,7 +163,9 @@ def Get_CoinList_acc_trade() :
     
     temp = get_My_CoinList()
     for curCoin in templist:
-        if not(curCoin in temp) :
+        curPrice = get_current_price(curCoin)
+        Ma15 = get_ma15(curCoin)
+        if not(curCoin in temp) and curPrice >= Ma15:
             CoinList.append(curCoin)
 
     return 1
@@ -204,14 +211,14 @@ while(True) :
     try:
         schedule.run_pending()
         
-        #print(CoinList)
+        print(CoinList)
 
         for curCoin in CoinList :
             curPrice = get_current_price(curCoin)
             Ma15 = get_ma15(curCoin)
             targetPrice = get_target_price(curCoin,"day",0.3)
 
-            #print(curCoin, curPrice, Ma15, targetPrice)
+            print(curCoin, curPrice, Ma15, targetPrice)
             if curPrice > targetPrice and curPrice > Ma15 :
                 buy(curCoin, 0.1)
 
@@ -225,7 +232,7 @@ while(True) :
             elif CoinInfo[curCoin]["StopLoss"] > curPrice :
                 sell(curCoin, curPrice)
                
-        #print(CoinInfo)
+        print(CoinInfo)
         
     except Exception as e :
         message = str(e) + " is Error Occured"
