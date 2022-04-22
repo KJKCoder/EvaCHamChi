@@ -8,9 +8,9 @@ import schedule
 
 # 슬랙 토큰 입력
 myToken = ""
-LongStrategyCoin = ["KRW-IQ","KRW-SRM","KRW-WAVES"]
-total = 100000
-left = 100000
+LongStrategyCoin = ["KRW-IQ","KRW-SRM","KRW-SAND"]
+total = 60000
+left = 60000
 # access키와 secret키 입력
 access = "XZq3Elq9i9xWk4dBgdmxRNrzorZiGkEGckL9o7Mo"
 secret = "pVVVa1oNNgGzCDadIU9cqxkCbYOna5RU2SEBZMKQ"
@@ -120,14 +120,14 @@ def Set_CoinInfo():
         if CoinInfo[curCoin]["HighPrice"] <= curPrice :
             CoinInfo[curCoin]["HighPrice"] = curPrice
         CoinInfo[curCoin]["BuyPrice"] = get_buy_avg_Price(curCoin)
-        CoinInfo[curCoin]["StopLoss"] = CoinInfo[curCoin]["BuyPrice"]*0.95
-        if CoinInfo[curCoin]["BuyPrice"]*1.05 < curPrice :
+        CoinInfo[curCoin]["StopLoss"] = CoinInfo[curCoin]["BuyPrice"]*0.97
+        if CoinInfo[curCoin]["BuyPrice"]*1.03 < curPrice :
             CoinInfo[curCoin]["TimeProfit"] = (CoinInfo[curCoin]["HighPrice"] + CoinInfo[curCoin]["BuyPrice"])*0.5
 
         if curCoin in LongStrategyCoin :
             CoinInfo[curCoin]["TimeProfit"] = -1
             CoinInfo[curCoin]["StopLoss"] = -1
-            if CoinInfo[curCoin]["BuyPrice"]*1.1 < curPrice :
+            if CoinInfo[curCoin]["BuyPrice"]*1.05 < curPrice :
                 CoinInfo[curCoin]["TimeProfit"] = (CoinInfo[curCoin]["HighPrice"] + CoinInfo[curCoin]["BuyPrice"])*0.5
     return True
 
@@ -161,9 +161,14 @@ def Get_CoinList_acc_trade() :
     templist = sorteddf.loc[0:9]["market"].values.tolist()
     
     temp = get_My_CoinList()
-    for curCoin in templist:
-        start_price = get_start_price(curCoin, "day")
-        Ma15 = get_ma15(curCoin)
+
+
+    if get_start_price("KRW-BTC", "day") >= get_ma15("KRW-BTC") :
+
+        for curCoin in templist:
+            start_price = get_start_price(curCoin, "day")
+            Ma15 = get_ma15(curCoin)
+
         if not(curCoin in temp) and start_price >= Ma15:
             CoinList.append(curCoin)
 
@@ -223,9 +228,9 @@ while(True) :
         for curCoin in CoinList :
             curPrice = get_current_price(curCoin)
             Ma15 = get_ma15(curCoin)
-            targetPrice = get_target_price(curCoin,"day",0.5)
+            targetPrice = get_target_price(curCoin,"day",0.3)
 
-            #print(curCoin, curPrice, Ma15, targetPrice)
+            print(curCoin, curPrice, Ma15, targetPrice)
             if curPrice > targetPrice and curPrice > Ma15 :
                 buy(curCoin, 0.1)
 
