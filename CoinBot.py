@@ -140,6 +140,7 @@ def get_My_CoinList():
     if "KRW" in temp :
         temp.remove("KRW")
     for cur in temp :
+        if type(cur) == int: break
         result.append("KRW-" + cur)
 
     return result
