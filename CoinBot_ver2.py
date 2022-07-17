@@ -12,8 +12,8 @@ LongStrategyCoin = ["KRW-IQ","KRW-SRM","KRW-SAND"]
 total = 60000
 left = 60000
 # access키와 secret키 입력
-access = "V9nZZ98XVN7XZu3KEyxVhqgOl7VNEVXdZ3xIdHvh"
-secret = "U4DlPfwPxtOd799JhgOZdQRk6RlixHowSRvuwur0"
+access = "XZq3Elq9i9xWk4dBgdmxRNrzorZiGkEGckL9o7Mo"
+secret = "pVVVa1oNNgGzCDadIU9cqxkCbYOna5RU2SEBZMKQ"
 upbit = pyupbit.Upbit(access, secret)
 # K값, 동시 구매 가능한 코인 개수
 K_value = 0.5
