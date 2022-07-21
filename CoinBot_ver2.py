@@ -16,7 +16,7 @@ access = "XZq3Elq9i9xWk4dBgdmxRNrzorZiGkEGckL9o7Mo"
 secret = "pVVVa1oNNgGzCDadIU9cqxkCbYOna5RU2SEBZMKQ"
 upbit = pyupbit.Upbit(access, secret)
 # K값, 동시 구매 가능한 코인 개수
-K_value = 0.5
+K_value = 0.3
 Limit_Value = 10 ; buy_Persent = 0.1
 
 #초기화
@@ -123,7 +123,7 @@ def Set_CoinInfo():
         if CoinInfo[curCoin]["HighPrice"] <= curPrice :
             CoinInfo[curCoin]["HighPrice"] = curPrice
         CoinInfo[curCoin]["BuyPrice"] = get_buy_avg_Price(curCoin)
-        CoinInfo[curCoin]["StopLoss"] = CoinInfo[curCoin]["BuyPrice"]*0.97
+        CoinInfo[curCoin]["StopLoss"] = CoinInfo[curCoin]["BuyPrice"]*0.96
         if CoinInfo[curCoin]["BuyPrice"]*1.03 < curPrice :
             CoinInfo[curCoin]["TimeProfit"] = (CoinInfo[curCoin]["HighPrice"] + CoinInfo[curCoin]["BuyPrice"])*0.5
 
@@ -184,7 +184,10 @@ def Get_CoinList_acc_trade() :
     else :
         message = "Watching Day" 
         Prt_and_Slack(message)
-
+    
+    message = "Balance :" + str(left)
+    Prt_and_Slack(message)
+    
     return 1
 
 #15일 이동 평균선 조회
@@ -243,7 +246,7 @@ while(True) :
             Ma15 = get_ma15(curCoin)
             targetPrice = get_target_price(curCoin,"day", K_value)
 
-            print(curCoin, curPrice, Ma15, targetPrice)
+            #print(curCoin, curPrice, Ma15, targetPrice)
             if curPrice > targetPrice and curPrice > Ma15 :
                 buy(curCoin, buy_Persent)
 
